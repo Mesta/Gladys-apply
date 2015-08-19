@@ -44,4 +44,14 @@ function pre($array){
 	echo "</pre>";
 }
 
+# ---------------
+# function joinPath
+# Behaviour : create a well formed path
+# Input : php array
+# Output: string
+# ---------------
+function joinPath($folders){
+	return join("/", $folders);
+}
+
 ?>

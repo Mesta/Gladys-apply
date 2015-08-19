@@ -7,13 +7,25 @@
 # -----------------------
 
 class Configuration {
-	private $_conf;
 
-	public function Configuration() {
-		$_conf = array();
-	}
+	private static $_conf = array(
+		"viewFolder" => "../views/",
+		"defaultTemplate" => "../views/layout/template.php",
 
-	public function getConfiguration() {
-		return this.$_conf;
+		"db_adress" 	=> "localhost",
+		"db_port" 		=> "3306",
+		"db_name" 		=> "apply_gladys",
+		"db_user" 		=> "root",
+		"db_password" 	=> "root",
+	);
+
+	# ------------------------
+	# function getConfiguration
+	# Behaviour : return configuration
+	# Input : $var is the name of the needed information
+	# Output: mixed (depend on what is stored)
+	# ------------------------
+	public static function getConfiguration($var) {
+		return self::$_conf[$var];
 	}
 }
