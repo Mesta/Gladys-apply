@@ -7,15 +7,15 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        <form action="/fiches/nouveau" method="POST">
+        <form action="<?php echo $data["url"] ?>" method="POST">
           <div>
             <label for="libelle">Libellé</label>
-            <input class="form-control" name="fiche[libelle]" id="fiche_libelle">
+            <?php echo "<input class='form-control' name='fiche[libelle]' id='fiche_libelle' value='". $data['fiche']->getLibelle() ."'>"; ?>
           </div>
           <br/>
           <div>
             <label for="libelle">Description</label>
-            <textarea class="form-control" name="fiche[description]" id="fiche_description" maxlength="500"></textarea>
+            <?php echo "<textarea class='form-control' name='fiche[description]'' id='fiche_description' maxlength='500'>". $data['fiche']->getDescription() ."</textarea>"; ?>
           </div>
           <br/>
           <div class="text-center">

@@ -16,9 +16,8 @@ if(isset($_SESSION["notice"])){
 			echo "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>";
 			echo "</div>";
 		}
-		
 
-		$_SESSION["notice"]["error"] = null;
+		$_SESSION["notice"]["error"] = array();
 	}
 
 	if(isset($_SESSION["notice"]["success"])){
@@ -30,9 +29,8 @@ if(isset($_SESSION["notice"])){
 			echo "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>";
 			echo "</div>";
 		}
-		
 
-		$_SESSION["notice"]["success"] = null;
+		$_SESSION["notice"]["success"] = array();
 	}
 }
 ?>

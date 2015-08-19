@@ -15,7 +15,7 @@ class Controller {
 		$this->template = Configuration::getConfiguration("defaultTemplate");
 	}
 
-	protected function renderTemplate() {
+	protected function renderTemplate($data = array()) {
 		include($this->template);
 	}
 }

@@ -13,79 +13,121 @@ require_once("../models/ficheModel.php");
 
 class FichesController extends Controller{
 
-	private static $allow_params = array("libelle", "description");
+    private static $allow_params = array("libelle", "description");
 
-	# ------------------------
-	# function FichesController
-	# Behaviour : default constructor
-	# Input : none
-	# Output: none
-	# ------------------------
-	public function FichesController() {
-		$this->viewFolder = joinPath(array(
-			Configuration::getConfiguration("viewFolder"),
-			"fiches"
-			)
-		);
-		parent::__construct();
-	}
+    # ------------------------
+    # function FichesController
+    # Behaviour : default constructor
+    # Input : none
+    # Output: none
+    # ------------------------
+    public function FichesController() {
+        $this->viewFolder = joinPath(array(
+                Configuration::getConfiguration("viewFolder"),
+                "fiches"
+            )
+        );
+        parent::__construct();
+    }
 
-	# ------------------------
-	# function index
-	# Behaviour : render index template
-	# Input : none
-	# Output: render tempate & view index
-	# ------------------------
-	public function index() {
-		$this->view = joinPath(array($this->viewFolder, "index.php"));
-		$this->renderTemplate();
-	}
+    # ------------------------
+    # function index
+    # Behaviour : render index template
+    # Input : none
+    # Output: render tempate & view index
+    # ------------------------
+    public function index() {
+        $fiches = Fiche::all();
 
-	# ------------------------
-	# function create
-	# Behaviour : render new template
-	# Input : none
-	# Output: render template & view new
-	# ------------------------
-	public function create() {
+        $this->view = joinPath(array($this->viewFolder, "index.php"));
 
-		// If POST request, check data and create Fiche object
-		if($_SERVER["REQUEST_METHOD"] == "POST"){
-			$fiche = new Fiche($this->new_params());
-			if($fiche->save()){
-				echo "salut";
-				$_SESSION["notice"]["success"][] = "La fiche a bien été créée.";
-				header("Location: /fiches");
-			}
-		}
-		
-		$this->view = joinPath(array($this->viewFolder, "form.php"));
-		$this->renderTemplate();
-	}
+        $data = array("fiches" => $fiches);
+        $this->renderTemplate($data);
+    }
 
-	# ------------------------
-	# function create
-	# Behaviour : check posted data, filter & sanitize them
-	# Input : none
-	# Output: array
-	# ------------------------
-	private function new_params(){
-		$clean = array();
+    # ------------------------
+    # function create
+    # Behaviour : render new template
+    # Input : none
+    # Output: render template & view new
+    # ------------------------
+    public function create() {
+        $fiche = new Fiche();
 
-		// Check posted data
-		if(isset($_POST["fiche"])) { 
+        // If POST request, check data and create Fiche object
+        if($_SERVER["REQUEST_METHOD"] == "POST"){
+            // Instanciate new Fiche
+            $fiche = new Fiche();
+            $fiche->fill($this->params_fiche());
 
-			// Check if each posted data are ine the whitelist
-			foreach($_POST["fiche"] as $key => $value) {
+            // And save it
+            if($fiche->save()){
+                $_SESSION["notice"]["success"][] = "La fiche a bien été créée.";
+                header("Location: /fiches");
+            }
+        }
 
-				// If it's ok : filled the returned array
-				if(in_array($key, FichesController::$allow_params)) {
-					$clean[$key] = htmlentities($value);
-				}
-			}
-		}
-		
-		return $clean;
-	}
+        $this->view = joinPath(array($this->viewFolder, "form.php"));
+
+        $data = array(
+            "url"   => $_SERVER['REQUEST_URI'],
+            "fiche" => $fiche,
+        );
+        $this->renderTemplate($data);
+    }
+
+    # ------------------------
+    # function new_params
+    # Behaviour : check posted data, filter & sanitize them
+    # Input : hash array with request parameter
+    # Output: none
+    # ------------------------
+    public function update($params){
+        // Load fiche from database
+        $fiche = Fiche::find($params["fiche_id"]);
+
+        // If POST request, check data and create Fiche object
+        if($_SERVER["REQUEST_METHOD"] == "POST"){
+            // Update fields
+            $fiche->fill($this->params_fiche());
+
+            if($fiche->save()){
+                $_SESSION["notice"]["success"][] = "La fiche a bien été modifiée.";
+                header("Location: /fiches");
+            }
+        }
+
+        $this->view = joinPath(array($this->viewFolder, "form.php"));
+        $data = array(
+            "url"   => $_SERVER['REQUEST_URI'],
+            "fiche" => $fiche,
+        );
+        $this->renderTemplate($data);
+    }
+
+    # ------------------------
+    # function new_params
+    # Behaviour : check posted data, filter & sanitize them
+    # Input : none
+    # Output: array
+    # ------------------------
+    private function params_fiche(){
+        $clean = array();
+
+        // Check posted data is nested in "fiche"
+        if(isset($_POST["fiche"])) {
+
+            // Check if each posted data are in the whitelist
+            foreach($_POST["fiche"] as $key => $value) {
+
+                // If it's ok : filled the returned array
+                if(in_array($key, FichesController::$allow_params)) {
+                    $clean[$key] = htmlentities($value);
+                }
+            }
+        }
+
+        return $clean;
+    }
 }
 ?>
