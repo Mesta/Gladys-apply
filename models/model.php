@@ -12,24 +12,40 @@ class Model {
     # ------------------------
     # function static find
     # Behaviour : Get row from DB pointed by $id parameter
-    # Input : mixed content
+    # Input : hash : column name => $value
     # Output: none
     # ------------------------
-    public static function find( $id ) {
+    public static function find( $params = array() ) {
         $class = get_called_class();
         $table_name = $class::$table_name;
 
         $retour = null;
 
-        $sql = "SELECT * FROM $table_name WHERE id = $id;";
+        $sql = "SELECT * FROM $table_name";
+
+        if(count($params) > 0) {
+            $sql .= " WHERE ";
+            foreach ($params as $column_name => $value) {
+                switch(gettype($value)){
+                    case "string":
+                        $sql .= "$column_name = '$value'";
+                        break;
+                    case "int":
+                        $sql .= "$column_name = $value";
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        $sql .= ";";
 
         // Get db connector
         $dbh = DBHelpers::getDBHelpers();
         // Try to execute SQL (connection + query)
         try{
-            // This request must return one single row
-            $rows = $dbh->select($sql, $class);
-            $retour = $rows[0];
+            $retour = $dbh->select($sql, $class);
         }catch(Exception $e){
             $_SESSION["notice"]["error"][] = $e->getMessage();
         }

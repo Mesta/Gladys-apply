@@ -10,7 +10,7 @@ CREATE TABLE fiche
 	description varchar(255),
 
 	PRIMARY KEY (id)
-);
+) ENGINE=InnoDB;
 
 CREATE TABLE categorie
 (
@@ -18,7 +18,7 @@ CREATE TABLE categorie
 	libelle varchar(50),
 
 	PRIMARY KEY (id)
-);
+) ENGINE=InnoDB;
 
 CREATE TABLE fiche_categorie
 (
@@ -26,18 +26,18 @@ CREATE TABLE fiche_categorie
 	categorie_id int NOT NULL,
 
 	PRIMARY KEY (fiche_id, categorie_id),
-	FOREIGN KEY (fiche_id) REFERENCES fiche(id),
-	FOREIGN KEY (categorie_id) REFERENCES categorie(id)
-);
+	FOREIGN KEY (fiche_id) REFERENCES fiche(id) ON DELETE CASCADE,
+	FOREIGN KEY (categorie_id) REFERENCES categorie(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
 
 CREATE TABLE categorie_categorie
 (
 	mere_id int NOT NULL,
 	fille_id int NOT NULL,
 
-	FOREIGN KEY (mere_id) REFERENCES categorie(id),
-	FOREIGN KEY (fille_id) REFERENCES categorie(id)
-);
+	FOREIGN KEY (mere_id) REFERENCES categorie(id) ON DELETE CASCADE,
+	FOREIGN KEY (fille_id) REFERENCES categorie(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
 
 INSERT INTO fiche(id, libelle, description) values(1, "Lorem", "ipsum dolor sit amet");
 INSERT INTO fiche(id, libelle, description) values(2, "consectetur", "adipiscing elit");

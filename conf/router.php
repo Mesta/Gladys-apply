@@ -21,14 +21,24 @@ class Router {
     # ---------------
     public function Router() {
         $this->routes = array(
+            new Route("ficheCategoriesController", "create", "#^\/fiches\/(?P<fiche_id>\d*)\/categories\/ajouter$#",
+                "GET", array("fiche_id")),
+            new Route("ficheCategoriesController", "create", "#^\/fiches\/(?P<fiche_id>\d*)\/categories\/ajouter$#",
+                "POST", array("fiche_id")),
+
+            // Categories management
             new Route("categoriesController", 	"index", 	"#^\/categories$#", "GET"),
             //new Route("categoriesController", 	"show", 	"#^\/categories\/(?P<categorie_id>\d)$#", "GET"   , array("categorie_id")),
             new Route("categoriesController", 	"create", 	"#^\/categories\/nouveau$#", "GET"),
             new Route("categoriesController", 	"create", 	"#^\/categories\/nouveau$#", "POST"),
-            new Route("categoriesController", 	"update", 	"#^\/categories\/(?P<categorie_id>\d*)\/modifier$#", "GET"   , array("categorie_id")),
-            new Route("categoriesController", 	"update", 	"#^\/categories\/(?P<categorie_id>\d*)\/modifier$#", "POST"  , array("categorie_id")),
-            new Route("categoriesController", 	"destroy", 	"#^\/categories\/(?P<categorie_id>\d*)\/supprimer$#","GET"   , array("categorie_id")),
-            
+            new Route("categoriesController", 	"update", 	"#^\/categories\/(?P<categorie_id>\d*)\/modifier$#", "GET",
+                array("categorie_id")),
+            new Route("categoriesController", 	"update", 	"#^\/categories\/(?P<categorie_id>\d*)\/modifier$#", "POST",
+                array("categorie_id")),
+            new Route("categoriesController", 	"destroy", 	"#^\/categories\/(?P<categorie_id>\d*)\/supprimer$#","GET",
+                array("categorie_id")),
+
+            // Fiches Management
             new Route("fichesController", 	"index", 	"#^\/fiches$#", "GET"),
             //new Route("fichesController", 	"show", 	"#^\/fiches\/(?P<fiche_id>\d)$#", "GET"   , array("fiche_id")),
             new Route("fichesController", 	"create", 	"#^\/fiches\/nouveau$#", "GET"),

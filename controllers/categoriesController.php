@@ -60,14 +60,16 @@ class CategoriesController extends Controller{
             $categorie->fill($this->params_categorie());
 
             // And save it
-            if($categorie->create()){
+            $res = $categorie->create();
+            if($res){
                 FlashHelpers::getFlashHelpers()->addSuccess("La categorie a bien été créée.");
                 header("Location: /categories");
             }else{
-                FlashHelpers::getFlashHelpers()->addSuccess("Une erreur est survenue lors de la création de la categorie.");
+                FlashHelpers::getFlashHelpers()->addSuccess("Une erreur est survenue lors de la création de la catégorie.");
             }
         }
-        else {
+
+        if (isset($res) && !$res or !isset($res)) {
 
             $this->view = joinPath(array($this->viewFolder, "form.php"));
 
@@ -88,36 +90,28 @@ class CategoriesController extends Controller{
     # ------------------------
     public function update($params){
         // Load categorie from database
-        $categorie = Categorie::find($params["categorie_id"]);
+        $categorie = Categorie::find(array("id" => $params["categorie_id"]))[0];
 
         // If POST request, check data and create Categorie object
-        if($_SERVER["REQUEST_METHOD"] == "POST"){
+        if($_SERVER["REQUEST_METHOD"] == "POST") {
             // Update fields
             $categorie->fill($this->params_categorie());
             $res = $categorie->update();
 
-            if($res !== false){
-                if($res === 0){
+            if ($res !== false) {
+                if ($res === 0) {
                     FlashHelpers::getFlashHelpers()->addInfo("Vous n'avez rien changé du tout :-).");
                     header("Location: /categories/$categorie->id/modifier");
-                }
-                else{
+                } else {
                     FlashHelpers::getFlashHelpers()->addSuccess("La categorie a bien été modifiée.");
                     header("Location: /categories");
                 }
+            } else {
+                FlashHelpers::getFlashHelpers()->addError("Une erreur est survenue durant la modification de la catégorie.");
             }
-            else{
-                FlashHelpers::getFlashHelpers()->addError("Une erreur est survenue durant la modification de la categorie.");
-                $this->view = joinPath(array($this->viewFolder, "form.php"));
-                $data = array(
-                    "title"     => "Modifier la catégorie",
-                    "url"   => $_SERVER['REQUEST_URI'],
-                    "categorie" => $categorie,
-                );
-                $this->renderTemplate($data);
-            }
-        }else{
+        }
 
+        if (isset($res) && !$res or !isset($res)) {
             $this->view = joinPath(array($this->viewFolder, "form.php"));
             $data = array(
                 "title"     => "Modifier la catégorie",
@@ -136,7 +130,7 @@ class CategoriesController extends Controller{
     # ------------------------
     public function destroy($params){
         // Load categorie from database
-        $categorie = Categorie::find($params["categorie_id"]);
+        $categorie = Categorie::find(array("id" => $params["categorie_id"]))[0];
 
         // Translate params to array with index "db-named field"
         $select["id"] = $params["categorie_id"];

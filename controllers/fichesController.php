@@ -64,7 +64,7 @@ class FichesController extends Controller{
                 FlashHelpers::getFlashHelpers()->addSuccess("La fiche a bien été créée.");
                 header("Location: /fiches");
             }else{
-                FlashHelpers::getFlashHelpers()->addSuccess("Une erreur est survenue lors de la création de la fiche.");
+                FlashHelpers::getFlashHelpers()->addError("Une erreur est survenue lors de la création de la fiche.");
             }
         }
         else {
@@ -88,7 +88,7 @@ class FichesController extends Controller{
     # ------------------------
     public function update($params){
         // Load fiche from database
-        $fiche = Fiche::find($params["fiche_id"]);
+        $fiche = Fiche::find(array("id" => $params["fiche_id"]))[0];
 
         // If POST request, check data and create Fiche object
         if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -136,7 +136,7 @@ class FichesController extends Controller{
     # ------------------------
     public function destroy($params){
         // Load fiche from database
-        $fiche = Fiche::find($params["fiche_id"]);
+        $fiche = Fiche::find(array("id" => $params["fiche_id"]))[0];
 
         // Translate params to array with index "db-named field"
         $select["id"] = $params["fiche_id"];

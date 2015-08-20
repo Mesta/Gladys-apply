@@ -7,6 +7,7 @@
 # ---------------------------------
 
 require_once("model.php");
+require_once("ficheCategorieModel.php");
 
 class Fiche extends Model {
 
@@ -17,6 +18,8 @@ class Fiche extends Model {
     public $libelle;
     public $description;
 
+    private $categories;
+
     # ---------------
     # function filll
     # Behaviour : Fill model from hash array
@@ -26,5 +29,14 @@ class Fiche extends Model {
     public function fill( $row ) {
         $this->libelle = $row["libelle"];
         $this->description = $row["description"];
+    }
+
+    public function getCategories(){
+        $ficheCategories = FicheCategorie::find(array("fiche_id" => $this->id));
+
+        foreach($ficheCategories as $ficheCategorie){
+            $this->categories[] = $ficheCategorie->getCategorie()[0];
+        }
+        return $this->categories;
     }
 }
