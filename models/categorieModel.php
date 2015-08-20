@@ -30,4 +30,14 @@ class Categorie extends Model {
         return $this->libelle;
     }
 
+    public function getFiches(){
+        $ficheCategories = FicheCategorie::find(array("categorie_id" => $this->id));
+
+        $this->fiches = array();
+
+        foreach($ficheCategories as $ficheCategorie){
+            $this->fiches[] = $ficheCategorie->getFiche()[0];
+        }
+        return $this->fiches;
+    }
 }

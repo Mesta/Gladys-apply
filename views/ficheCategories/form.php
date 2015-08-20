@@ -32,11 +32,32 @@
                 }
                 else
                     echo "<p>Cette fiche appartiens déjà à toutes les catégories.</p>";
-
             }
             elseif(isset($data["categorie_id"])){
                 $categorie_id = $data["categorie_id"];
-                echo "<input type='hidden' value='$fiche_id' name='ficheCategorie[fiche_id]'>";
+                echo "<input type='hidden' value='$categorie_id' name='ficheCategorie[categorie_id]' id='ficheCategorie_categorie_id'>";
+
+                // Get All categories from DB
+                $all = Fiche::all();
+
+                // Get Categories already linked to this fiche
+                $categorie = Categorie::find(array("id" => $categorie_id))[0];
+                $fiche_categories = $categorie->getFiches();
+
+                // Diff both array
+                // Diff is made calling __toString() magic function from object
+                // For this purpose, the string MUST be unique value, or diff fail
+                $diff = array_diff($all, $fiche_categories);
+
+                if(count($diff) > 0){
+                    echo "<select id ='fiche_categorie_fiche_id' name='ficheCategorie[fiche_id]' class='form-control'>";
+                    foreach($diff as $fiche){
+                        echo "<option value='$fiche->id'>$fiche->libelle</option>";
+                    }
+                    echo "</select>";
+                }
+                else
+                    echo "<p>Cette catégorie possède déjà toutes les fiches.</p>";
             }
             ?>
 
@@ -47,7 +68,7 @@
                     echo "<a href='/fiches' class='btn btn-danger'>Annuler</a>";
                 }
                 elseif(isset($data["categorie_id"])){
-                    echo "<a href='/categories' class='btn btn-danger'>Annuler</a>";
+                    echo "<a href='/categories/$categorie_id' class='btn btn-danger'>Annuler</a>";
                 }
                 ?>
             </div>

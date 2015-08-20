@@ -117,6 +117,7 @@ class Model {
                     $sql .= "$value";
                     break;
                 default:
+                    $sql .= "null";
                     break;
             }
 

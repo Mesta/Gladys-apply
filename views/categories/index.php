@@ -24,6 +24,7 @@
                     echo "                <td>$libelle</td>";
                     echo "                <td align='right'>";
                     echo "                    <span class='btn-group btn-group-sm' role='group'>";
+                    echo "                        <a class='btn btn-sm btn-default' href='categories/$id'>Voir</a>";
                     echo "                        <a class='btn btn-sm btn-default' href='categories/$id/modifier'>Modifier</a>";
                     echo "                        <a class='btn btn-sm btn-danger' href='categories/$id/supprimer' method='delete'>Supprimer</a>";
                     echo "                    </span>";

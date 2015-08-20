@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-12 align-right">
-        <a href="/fiches/nouveau" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i> Créer une fiche</a>
+        <a href="/fiches/nouveau" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> Créer une fiche</a>
     </div>
 </div>
 

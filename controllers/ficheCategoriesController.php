@@ -51,11 +51,20 @@ class FicheCategoriesController extends Controller{
             // And save it
             $res = $ficheCategorie->create();
             if ($res) {
+
                 FlashHelpers::getFlashHelpers()->addSuccess("La catégorie a bien été ajouté.");
+
+                // Prepare callback path based on route request (check regex in Routes class)
                 $callback = $request["callback"];
+
+                // Different callback if it goes to categorie
+                if($callback === "categories"){
+                    $callback .= "/".$request["categorie_id"];
+                }
+
                 header("Location: /$callback");
             } else {
-                FlashHelpers::getFlashHelpers()->addError("Une erreur est survenue lors de la création de la categorie.");
+                FlashHelpers::getFlashHelpers()->addError("Une erreur est survenue lors du traitement de votre requête.");
             }
         }
 
@@ -63,14 +72,20 @@ class FicheCategoriesController extends Controller{
 
             $this->view = joinPath(array($this->viewFolder, "form.php"));
 
+            // Pass parameters to the view
             $data = array(
                 "url" => $_SERVER['REQUEST_URI'],
                 "categorie" => $ficheCategorie,
             );
 
+            // Override params if request come from fiche page
             if (isset($request["fiche_id"])) {
                 $data["title"] = "Ajouter une catégorie";
                 $data["fiche_id"] = $request["fiche_id"];
+            }
+            elseif(isset($request["categorie_id"])){
+                $data["title"] = "Ajouter une fiche";
+                $data["categorie_id"] = $request["categorie_id"];
             }
 
             $this->renderTemplate($data);
@@ -83,22 +98,27 @@ class FicheCategoriesController extends Controller{
     # Input : hash array with request parameter
     # Output: none
     # ------------------------
-    public function destroy($params){
+    public function destroy($request){
         // Get params and cast them to integer
-        $categorie_id   = (int)$params["categorie_id"];
-        $fiche_id       = (int)$params["fiche_id"];
+        $categorie_id   = (int)$request["categorie_id"];
+        $fiche_id       = (int)$request["fiche_id"];
 
         $find_params = array("fiche_id" => $fiche_id, "categorie_id" => $categorie_id);
 
         // Load categorie from database
         $ficheCategorie = FicheCategorie::find($find_params)[0];
 
-        $callback = $params["callback"];
+        $callback = $request["callback"];
 
         if($ficheCategorie->destroy($find_params)){
 
-            // Flash message success
-            FlashHelpers::getFlashHelpers()->addSuccess("La catégorie a bien été retirée de cette fiche.");
+            FlashHelpers::getFlashHelpers()->addSuccess("La fiche n'appartiens plus à cette catégorie.");
+
+            // Different callback if it goes to categorie
+            if($callback == "categories") {
+                $callback .= "/" . $request["categorie_id"];
+            }
+
             header("Location:/$callback");
         }
         else{

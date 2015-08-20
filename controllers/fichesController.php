@@ -60,15 +60,16 @@ class FichesController extends Controller{
             $fiche->fill($this->params_fiche());
 
             // And save it
-            if($fiche->create()){
+            $res = $fiche->create();
+            if($res){
                 FlashHelpers::getFlashHelpers()->addSuccess("La fiche a bien été créée.");
                 header("Location: /fiches");
             }else{
                 FlashHelpers::getFlashHelpers()->addError("Une erreur est survenue lors de la création de la fiche.");
             }
         }
-        else {
 
+        if (isset($res) && !$res or !isset($res)) {
             $this->view = joinPath(array($this->viewFolder, "form.php"));
 
             $data = array(
@@ -98,7 +99,7 @@ class FichesController extends Controller{
 
             if($res !== false){
                 if($res === 0){
-                    FlashHelpers::getFlashHelpers()->addInfo("Vous n'avez rien changé du tout :-).");
+                    FlashHelpers::getFlashHelpers()->addInfo("Vous n'avez rien changé du tout :-)");
                     header("Location: /fiches/$fiche->id/modifier");
                 }
                 else{
@@ -116,8 +117,11 @@ class FichesController extends Controller{
                 );
                 $this->renderTemplate($data);
             }
-        }else{
+        }
 
+        // Do not render when previously call header()
+        // When : $res exist and $res !== false
+        if (isset($res) && !$res === false or !isset($res)) {
             $this->view = joinPath(array($this->viewFolder, "form.php"));
             $data = array(
                 "title"     => "Modifier la fiche",

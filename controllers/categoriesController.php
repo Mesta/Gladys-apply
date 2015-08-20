@@ -45,6 +45,20 @@ class CategoriesController extends Controller{
     }
 
     # ------------------------
+    # function show
+    # Behaviour : render show template
+    # Input : none
+    # Output: render tempate & view show
+    # ------------------------
+    public function show($request) {
+        $categorie = Categorie::find(array("id" => $request["categorie_id"]))[0];
+        $this->view = joinPath(array($this->viewFolder, "show.php"));
+
+        $data = array("categorie" => $categorie);
+        $this->renderTemplate($data);
+    }
+
+    # ------------------------
     # function create
     # Behaviour : render new template
     # Input : none
@@ -99,19 +113,23 @@ class CategoriesController extends Controller{
             $res = $categorie->update();
 
             if ($res !== false) {
-                if ($res === 0) {
-                    FlashHelpers::getFlashHelpers()->addInfo("Vous n'avez rien changé du tout :-).");
+                if ($res === 0) { // Aucun changement
+                    FlashHelpers::getFlashHelpers()->addInfo("Vous n'avez rien changé du tout :-)");
                     header("Location: /categories/$categorie->id/modifier");
-                } else {
-                    FlashHelpers::getFlashHelpers()->addSuccess("La categorie a bien été modifiée.");
-                    header("Location: /categories");
                 }
-            } else {
+                else { // Ok
+                    FlashHelpers::getFlashHelpers()->addSuccess("La categorie a bien été modifiée.");
+                    header("Location: /categories/$categorie->id");
+                }
+            }
+            else { // Erreur indeterminée
                 FlashHelpers::getFlashHelpers()->addError("Une erreur est survenue durant la modification de la catégorie.");
             }
         }
 
-        if (isset($res) && !$res or !isset($res)) {
+        // Do not render when previously call header()
+        // When : $res exist and $res !== false
+        if (isset($res) && !$res === false or !isset($res)) {
             $this->view = joinPath(array($this->viewFolder, "form.php"));
             $data = array(
                 "title"     => "Modifier la catégorie",

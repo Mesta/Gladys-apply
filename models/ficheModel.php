@@ -41,4 +41,8 @@ class Fiche extends Model {
         }
         return $this->categories;
     }
+
+    public function __toString(){
+        return $this->libelle;
+    }
 }
