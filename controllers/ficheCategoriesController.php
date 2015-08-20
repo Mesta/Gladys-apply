@@ -13,7 +13,7 @@ require_once("../models/categorieModel.php");
 
 class FicheCategoriesController extends Controller{
 
-    private static $allow_params = array("fiche_id", "categorie_id", "callback");
+    private static $allow_params = array("fiche_id", "categorie_id");
 
     # ------------------------
     # function FicheCategoriesController
@@ -36,21 +36,24 @@ class FicheCategoriesController extends Controller{
     # Input : none
     # Output: render template & view new
     # ------------------------
-    public function create($params)
+    public function create($request)
     {
         $ficheCategorie = new FicheCategorie();
 
         // If POST request, check data and create FicheCategorie object
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $params = $this->params_categorie();
+            $params["fiche_id"] = (int)$params["fiche_id"];
+            $params["categorie_id"] = (int)$params["categorie_id"];
+
             $ficheCategorie->fill($params);
 
             // And save it
             $res = $ficheCategorie->create();
             if ($res) {
-                $callback = $params["callback"];
                 FlashHelpers::getFlashHelpers()->addSuccess("La catégorie a bien été ajouté.");
-                header("Location: $callback");
+                $callback = $request["callback"];
+                header("Location: /$callback");
             } else {
                 FlashHelpers::getFlashHelpers()->addError("Une erreur est survenue lors de la création de la categorie.");
             }
@@ -65,13 +68,12 @@ class FicheCategoriesController extends Controller{
                 "categorie" => $ficheCategorie,
             );
 
-            if (isset($params["fiche_id"])) {
+            if (isset($request["fiche_id"])) {
                 $data["title"] = "Ajouter une catégorie";
-                $data["fiche_id"] = $params["fiche_id"];
+                $data["fiche_id"] = $request["fiche_id"];
             }
 
             $this->renderTemplate($data);
-
         }
     }
 
@@ -82,20 +84,26 @@ class FicheCategoriesController extends Controller{
     # Output: none
     # ------------------------
     public function destroy($params){
+        // Get params and cast them to integer
+        $categorie_id   = (int)$params["categorie_id"];
+        $fiche_id       = (int)$params["fiche_id"];
+
+        $find_params = array("fiche_id" => $fiche_id, "categorie_id" => $categorie_id);
+
         // Load categorie from database
-        $categorie = Categorie::find($params["categorie_id"]);
+        $ficheCategorie = FicheCategorie::find($find_params)[0];
 
-        // Translate params to array with index "db-named field"
-        $select["id"] = $params["categorie_id"];
+        $callback = $params["callback"];
 
-        if($categorie->destroy($select)){
+        if($ficheCategorie->destroy($find_params)){
+
             // Flash message success
-            FlashHelpers::getFlashHelpers()->addSuccess("La categorie a bien été supprimée.");
-            header('Location:/ficheFicheCategories');
+            FlashHelpers::getFlashHelpers()->addSuccess("La catégorie a bien été retirée de cette fiche.");
+            header("Location:/$callback");
         }
         else{
-            FlashHelpers::getFlashHelpers()->addError("Une erreur s'est produite durant la suppression de la categorie.");
-            header('Location:/ficheFicheCategories');
+            FlashHelpers::getFlashHelpers()->addError("Une erreur s'est produite lors du traitement de votre requête.");
+            header("Location:/$callback");
         }
     }
 

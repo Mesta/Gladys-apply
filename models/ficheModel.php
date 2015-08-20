@@ -34,6 +34,8 @@ class Fiche extends Model {
     public function getCategories(){
         $ficheCategories = FicheCategorie::find(array("fiche_id" => $this->id));
 
+        $this->categories = array();
+
         foreach($ficheCategories as $ficheCategorie){
             $this->categories[] = $ficheCategorie->getCategorie()[0];
         }

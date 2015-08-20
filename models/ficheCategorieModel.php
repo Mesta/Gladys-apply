@@ -13,6 +13,7 @@ class FicheCategorie extends Model {
     protected static $persisted_fields = array("fiche_id", "categorie_id");
     protected static $table_name = "fiche_categorie";
 
+    public $id;
     public $fiche_id;
     public $categorie_id;
 
@@ -29,5 +30,9 @@ class FicheCategorie extends Model {
 
     public function getCategorie(){
         return Categorie::find(array("id" => $this->categorie_id));
+    }
+
+    public function getFiche(){
+        return Fiche::find(array("id" => $this->fiche_id));
     }
 }

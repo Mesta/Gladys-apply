@@ -26,7 +26,7 @@ foreach($fiches as $fiche) {
         foreach ($categories as $categorie) {
             echo "            <tr>";
             echo "                <td><a href='/categories/$categorie->id'>$categorie->libelle</a></td>";
-            echo "                <td align='right'><a href='#'><i class='glyphicon glyphicon-remove'></i></a></td>";
+            echo "                <td align='right'><a href='/fiches/$fiche->id/categories/$categorie->id/supprimer'><i class='glyphicon glyphicon-remove'></i></a></td>";
             echo "            </tr>";
         }
         echo "</table>";

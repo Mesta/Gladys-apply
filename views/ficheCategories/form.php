@@ -10,21 +10,33 @@
             if(isset($data["fiche_id"])){
                 $fiche_id = $data["fiche_id"];
                 echo "<input type='hidden' value='$fiche_id' name='ficheCategorie[fiche_id]' id='ficheCategorie_fiche_id'>";
-                echo "<input type='hidden' value='/fiches' name='ficheCategorie[callback]' id='ficheCategorie_fiche_id'>";
 
-                echo "<select id ='fichecategorie_categorie_id' name='ficheCategorie[categorie_id]' class='form-control'>";
+                // Get All categories from DB
                 $all = Categorie::all();
-                foreach($all as $categorie){
-                    echo "<option value='$categorie->id'>$categorie->libelle</option>";
+
+                // Get Categories already linked to this fiche
+                $fiche = Fiche::find(array("id" => $fiche_id))[0];
+                $fiche_categories = $fiche->getCategories();
+
+                // Diff both array
+                // Diff is made calling __toString() magic function from object
+                // For this purpose, the string MUST be unique value, or diff fail
+                $diff = array_diff($all, $fiche_categories);
+
+                if(count($diff) > 0){
+                    echo "<select id ='fichecategorie_categorie_id' name='ficheCategorie[categorie_id]' class='form-control'>";
+                    foreach($diff as $categorie){
+                        echo "<option value='$categorie->id'>$categorie->libelle</option>";
+                    }
+                    echo "</select>";
                 }
-                echo "</select>";
+                else
+                    echo "<p>Cette fiche appartiens déjà à toutes les catégories.</p>";
+
             }
             elseif(isset($data["categorie_id"])){
                 $categorie_id = $data["categorie_id"];
                 echo "<input type='hidden' value='$fiche_id' name='ficheCategorie[fiche_id]'>";
-
-                echo "<input type='hidden' value='/categories' name='ficheCategorie[callback]' id='ficheCategorie_fiche_id'>";
-
             }
             ?>
 

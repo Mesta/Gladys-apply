@@ -35,6 +35,7 @@ CREATE TABLE categorie_categorie
 	mere_id int NOT NULL,
 	fille_id int NOT NULL,
 
+	PRIMARY KEY (mere_id, fille_id),
 	FOREIGN KEY (mere_id) REFERENCES categorie(id) ON DELETE CASCADE,
 	FOREIGN KEY (fille_id) REFERENCES categorie(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;

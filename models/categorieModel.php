@@ -25,4 +25,9 @@ class Categorie extends Model {
     public function fill( $row ) {
         $this->libelle = $row["libelle"];
     }
+
+    public function __toString(){
+        return $this->libelle;
+    }
+
 }

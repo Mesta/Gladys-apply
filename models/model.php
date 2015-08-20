@@ -23,19 +23,25 @@ class Model {
 
         $sql = "SELECT * FROM $table_name";
 
+
         if(count($params) > 0) {
+            $cpt = 0;
             $sql .= " WHERE ";
             foreach ($params as $column_name => $value) {
                 switch(gettype($value)){
                     case "string":
                         $sql .= "$column_name = '$value'";
                         break;
-                    case "int":
+                    case "integer":
                         $sql .= "$column_name = $value";
                         break;
                     default:
                         break;
                 }
+                if($cpt < count($params) -1){
+                    $sql .= " AND ";
+                }
+                $cpt++;
             }
         }
 
@@ -47,7 +53,7 @@ class Model {
         try{
             $retour = $dbh->select($sql, $class);
         }catch(Exception $e){
-            $_SESSION["notice"]["error"][] = $e->getMessage();
+            FlashHelpers::getFlashHelpers()->addError($e->getMessage());
         }
 
         return $retour;
@@ -102,8 +108,17 @@ class Model {
         for($cpt = 0; $cpt < count($class::$persisted_fields); $cpt++){
             // Access to field
             $field = $class::$persisted_fields[$cpt];
-            $val = $this->$field;
-            $sql .= "'$val'";
+            $value = $this->$field;
+            switch(gettype($value)){
+                case "string":
+                    $sql .= "'$value'";
+                    break;
+                case "integer":
+                    $sql .= "$value";
+                    break;
+                default:
+                    break;
+            }
 
             // Add comma between field except the last
             if($cpt < (count($class::$persisted_fields) - 1))
@@ -112,7 +127,12 @@ class Model {
         $sql .= ");";
 
         $connector = DBHelpers::getDBHelpers();
-        return $connector->create($sql);
+        $res = $connector->create($sql);
+        if($res > 0)
+            $retour = true;
+        else
+            $retour = false;
+        return $retour;
     }
 
     # ------------------------
@@ -149,23 +169,39 @@ class Model {
     # ------------------------
     # function destroy
     # Behaviour : Destroy row
-    # Input : params containing id
+    # Input : none
     # Output: none
     # ------------------------
-    public function destroy($params){
-
+    public function destroy($params = array()){
+        // Get class of current object
         $class = get_class($this);
+        // Get table name
         $table_name = $class::$table_name;
+        // Generate sql statement
         $sql = "DELETE FROM $table_name WHERE ";
 
-        $cpt = 0;
-        foreach($params as $field => $value){
-            $sql .= "$field = $value";
-            if($cpt < count($params) -1)
-                $sql .= " AND ";
+        if(count($params) > 0){
+            $cpt = 0;
+            foreach ($params as $column_name => $value) {
+                switch(gettype($value)){
+                    case "string":
+                        $sql .= "$column_name = '$value'";
+                        break;
+                    case "integer":
+                        $sql .= "$column_name = $value";
+                        break;
+                    default:
+                        break;
+                }
+                if($cpt < count($params) -1){
+                    $sql .= " AND ";
+                }
+                $cpt++;
+            }
         }
+        else
+            $sql .= "id = $this->id";
 
-        echo $sql;
         $connector = DBHelpers::getDBHelpers();
         return $connector->delete($sql);
     }

@@ -21,10 +21,13 @@ class Router {
     # ---------------
     public function Router() {
         $this->routes = array(
-            new Route("ficheCategoriesController", "create", "#^\/fiches\/(?P<fiche_id>\d*)\/categories\/ajouter$#",
-                "GET", array("fiche_id")),
-            new Route("ficheCategoriesController", "create", "#^\/fiches\/(?P<fiche_id>\d*)\/categories\/ajouter$#",
-                "POST", array("fiche_id")),
+            new Route("ficheCategoriesController", "create", "#^\/(?P<callback>fiches)\/(?P<fiche_id>\d*)\/categories\/ajouter$#",
+                "GET", array("callback", "fiche_id")),
+            new Route("ficheCategoriesController", "create", "#^\/(?P<callback>fiches)\/(?P<fiche_id>\d*)\/categories\/ajouter$#",
+                "POST", array("callback", "fiche_id")),
+            new Route("ficheCategoriesController", "destroy",
+                "#^\/(?P<callback>fiches)\/(?P<fiche_id>\d*)\/categories\/(?P<categorie_id>\d*)\/supprimer$#", "GET",
+                array("fiche_id", "categorie_id", "callback")),
 
             // Categories management
             new Route("categoriesController", 	"index", 	"#^\/categories$#", "GET"),
