@@ -14,6 +14,7 @@ require_once "helpers/flash_helpers.php";
 
 require_once "controllers/defaultController.php";
 require_once "controllers/fichesController.php";
+require_once "controllers/categoriesController.php";
 
 class Application {
     // Singleton design pattern

@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-md-12 align-right">
-    <h1>Nouvelle fiche</h1>
+    <h1><?php echo $data["title"]; ?></h1>
   </div>
 </div>
 <div class="row">

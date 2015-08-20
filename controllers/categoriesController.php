@@ -1,30 +1,30 @@
 <?php
 
 # ---------------------------------
-# File : FichesController.php
+# File : CategoriesController.php
 # Creator : Jeremy Lardet
-# Date : 19/08/2015
+# Date : 20/08/2015
 # ---------------------------------
 require_once("../conf/configuration.php");
 require_once("../helpers/application_helpers.php");
 require_once("controller.php");
 
-require_once("../models/ficheModel.php");
+require_once("../models/categorieModel.php");
 
-class FichesController extends Controller{
+class CategoriesController extends Controller{
 
     private static $allow_params = array("libelle", "description");
 
     # ------------------------
-    # function FichesController
+    # function CategoriesController
     # Behaviour : default constructor
     # Input : none
     # Output: none
     # ------------------------
-    public function FichesController() {
+    public function CategoriesController() {
         $this->viewFolder = joinPath(array(
                 Configuration::getConfiguration("viewFolder"),
-                "fiches"
+                "categories"
             )
         );
         parent::__construct();
@@ -37,10 +37,10 @@ class FichesController extends Controller{
     # Output: render tempate & view index
     # ------------------------
     public function index() {
-        $fiches = Fiche::all();
+        $categories = Categorie::all();
         $this->view = joinPath(array($this->viewFolder, "index.php"));
 
-        $data = array("fiches" => $fiches);
+        $data = array("categories" => $categories);
         $this->renderTemplate($data);
     }
 
@@ -51,20 +51,20 @@ class FichesController extends Controller{
     # Output: render template & view new
     # ------------------------
     public function create() {
-        $fiche = new Fiche();
+        $categorie = new Categorie();
 
-        // If POST request, check data and create Fiche object
+        // If POST request, check data and create Categorie object
         if($_SERVER["REQUEST_METHOD"] == "POST"){
-            // Instanciate new Fiche
-            $fiche = new Fiche();
-            $fiche->fill($this->params_fiche());
+            // Instanciate new Categorie
+            $categorie = new Categorie();
+            $categorie->fill($this->params_categorie());
 
             // And save it
-            if($fiche->create()){
-                FlashHelpers::getFlashHelpers()->addSuccess("La fiche a bien été créée.");
-                header("Location: /fiches");
+            if($categorie->create()){
+                FlashHelpers::getFlashHelpers()->addSuccess("La categorie a bien été créée.");
+                header("Location: /categories");
             }else{
-                FlashHelpers::getFlashHelpers()->addSuccess("Une erreur est survenue lors de la création de la fiche.");
+                FlashHelpers::getFlashHelpers()->addSuccess("Une erreur est survenue lors de la création de la categorie.");
             }
         }
         else {
@@ -72,9 +72,9 @@ class FichesController extends Controller{
             $this->view = joinPath(array($this->viewFolder, "form.php"));
 
             $data = array(
-                "title"     => "Créer une fiche",
-                "url" => $_SERVER['REQUEST_URI'],
-                "fiche" => $fiche,
+                "title" => "Nouvelle catégorie",
+                "url"   => $_SERVER['REQUEST_URI'],
+                "categorie" => $categorie,
             );
             $this->renderTemplate($data);
         }
@@ -87,32 +87,32 @@ class FichesController extends Controller{
     # Output: none
     # ------------------------
     public function update($params){
-        // Load fiche from database
-        $fiche = Fiche::find($params["fiche_id"]);
+        // Load categorie from database
+        $categorie = Categorie::find($params["categorie_id"]);
 
-        // If POST request, check data and create Fiche object
+        // If POST request, check data and create Categorie object
         if($_SERVER["REQUEST_METHOD"] == "POST"){
             // Update fields
-            $fiche->fill($this->params_fiche());
-            $res = $fiche->update();
+            $categorie->fill($this->params_categorie());
+            $res = $categorie->update();
 
             if($res !== false){
                 if($res === 0){
                     FlashHelpers::getFlashHelpers()->addInfo("Vous n'avez rien changé du tout :-).");
-                    header("Location: /fiches/$fiche->id/modifier");
+                    header("Location: /categories/$categorie->id/modifier");
                 }
                 else{
-                    FlashHelpers::getFlashHelpers()->addSuccess("La fiche a bien été modifiée.");
-                    header("Location: /fiches");
+                    FlashHelpers::getFlashHelpers()->addSuccess("La categorie a bien été modifiée.");
+                    header("Location: /categories");
                 }
             }
             else{
-                FlashHelpers::getFlashHelpers()->addError("Une erreur est survenue durant la modification de la fiche.");
+                FlashHelpers::getFlashHelpers()->addError("Une erreur est survenue durant la modification de la categorie.");
                 $this->view = joinPath(array($this->viewFolder, "form.php"));
                 $data = array(
-                    "title"     => "Modifier la fiche",
+                    "title"     => "Modifier la catégorie",
                     "url"   => $_SERVER['REQUEST_URI'],
-                    "fiche" => $fiche,
+                    "categorie" => $categorie,
                 );
                 $this->renderTemplate($data);
             }
@@ -120,9 +120,9 @@ class FichesController extends Controller{
 
             $this->view = joinPath(array($this->viewFolder, "form.php"));
             $data = array(
-                "title"     => "Modifier la fiche",
-                "url"   => $_SERVER['REQUEST_URI'],
-                "fiche" => $fiche,
+                "title"     => "Modifier la catégorie",
+                "url"       => $_SERVER['REQUEST_URI'],
+                "categorie" => $categorie,
             );
             $this->renderTemplate($data);
         }
@@ -135,20 +135,20 @@ class FichesController extends Controller{
     # Output: none
     # ------------------------
     public function destroy($params){
-        // Load fiche from database
-        $fiche = Fiche::find($params["fiche_id"]);
+        // Load categorie from database
+        $categorie = Categorie::find($params["categorie_id"]);
 
         // Translate params to array with index "db-named field"
-        $select["id"] = $params["fiche_id"];
+        $select["id"] = $params["categorie_id"];
 
-        if($fiche->destroy($select)){
+        if($categorie->destroy($select)){
             // Flash message success
-            FlashHelpers::getFlashHelpers()->addSuccess("La fiche a bien été supprimée.");
-            header('Location:/fiches');
+            FlashHelpers::getFlashHelpers()->addSuccess("La categorie a bien été supprimée.");
+            header('Location:/categories');
         }
         else{
-            FlashHelpers::getFlashHelpers()->addError("Une erreur s'est produite durant la suppression de la fiche.");
-            header('Location:/fiches');
+            FlashHelpers::getFlashHelpers()->addError("Une erreur s'est produite durant la suppression de la categorie.");
+            header('Location:/categories');
         }
     }
 
@@ -158,14 +158,14 @@ class FichesController extends Controller{
     # Input : none
     # Output: array
     # ------------------------
-    private function params_fiche(){
+    private function params_categorie(){
         $clean = array();
 
-        // Check posted data is nested in "fiche"
-        if(isset($_POST["fiche"])) {
+        // Check posted data is nested in "categorie"
+        if(isset($_POST["categorie"])) {
 
             // Check if each posted data are in the whitelist
-            foreach($_POST["fiche"] as $key => $value) {
+            foreach($_POST["categorie"] as $key => $value) {
 
                 // If it's ok : filled the returned array
                 if(in_array($key, self::$allow_params)) {
