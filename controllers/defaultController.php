@@ -11,6 +11,12 @@ require_once("controller.php");
 
 class DefaultController extends Controller{
 
+	# ------------------------
+	# function DefaultController
+	# Behaviour : default constructor
+	# Input : none
+	# Output: none
+	# ------------------------
 	public function DefaultController() {
 		$this->viewFolder = joinPath(array(
 			Configuration::getConfiguration("viewFolder"),
@@ -20,6 +26,12 @@ class DefaultController extends Controller{
 		parent::__construct();
 	}
 
+	# ------------------------
+	# function index
+	# Behaviour : Render index page
+	# Input : none
+	# Output: none
+	# ------------------------
 	public function index(){
 		$this->view = joinPath(array($this->viewFolder, "index.php"));
 		$this->renderTemplate();

@@ -17,6 +17,12 @@ class Fiche extends Model {
     public $libelle;
     public $description;
 
+    # ---------------
+    # function filll
+    # Behaviour : Fill model from hash array
+    # Input : $row : Hash
+    # Output: none
+    # ---------------
     public function fill( $row ) {
         $this->libelle = $row["libelle"];
         $this->description = $row["description"];

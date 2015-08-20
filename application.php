@@ -24,6 +24,12 @@ class Application {
         $this->getRoute();
     }
 
+    # ---------------
+    # function getRoute
+    # Behaviour : Check if route exist, and call right method on right controller
+    # Input : none
+    # Output: none
+    # ---------------
     private function getRoute() {
         $router = Router::getRouter();
 

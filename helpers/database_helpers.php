@@ -45,12 +45,24 @@ class DBHelpers{
         return "$this->driver:host=$this->hostname;dbname=$this->db";
     }
 
+    # ---------------
+    # function select
+    # Behaviour : execute query and return array object of $class
+    # Input : $sql : string, $class : string
+    # Output: array
+    # ---------------
     public function select($sql, $class){
         $dbh = $this->connect();
         $stmt = $dbh->query($sql);
         return $stmt->fetchAll(PDO::FETCH_CLASS, $class);
     }
 
+    # ---------------
+    # function create
+    # Behaviour : execute query, return the number of modified row, or false
+    # Input : $sql : string
+    # Output: int or false
+    # ---------------
     public function create($sql){
         $dbh = $this->connect();
         $stmt = $dbh->prepare($sql);
@@ -63,7 +75,12 @@ class DBHelpers{
         return $retour;
     }
 
-
+    # ---------------
+    # function update
+    # Behaviour : execute query, return the number of modified row, or false
+    # Input : $sql : string
+    # Output: int or false
+    # ---------------
     public function update($sql){
         $dbh = $this->connect();
         $stmt = $dbh->prepare($sql);
@@ -76,6 +93,12 @@ class DBHelpers{
         return $retour;
     }
 
+    # ---------------
+    # function delete
+    # Behaviour : execute query, return true if execution went well, else false
+    # Input : $sql : string
+    # Output: true or false
+    # ---------------
     public function delete($sql){
         $dbh = $this->connect();
 
@@ -87,6 +110,12 @@ class DBHelpers{
         return $retour;
     }
 
+    # ---------------
+    # function connect
+    # Behaviour : create a connection to database
+    # Input : none
+    # Output: null or PDO object
+    # ---------------
     private function connect(){
         $pdo = null;
         try{

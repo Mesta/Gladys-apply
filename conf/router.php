@@ -13,6 +13,12 @@ class Router {
 
     private $routes;
 
+    # ---------------
+    # function Router
+    # Behaviour : Default constructor, initiate routes
+    # Input : none
+    # Output: none
+    # ---------------
     public function Router() {
         $this->routes = array(
             new Route("categoriesController", 	"index", 	"#^\/categories$#", "GET"),

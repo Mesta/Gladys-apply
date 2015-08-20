@@ -17,16 +17,16 @@ function params(){
 		switch ($_SERVER['REQUEST_METHOD'])
 		{
 			case 'GET':
-			return $_GET;
-			break;
+				return $_GET;
+				break;
 
-			case 'POST':			
-			return $_POST;
-			break;
+			case 'POST':
+				return $_POST;
+				break;
 
 			case 'DELETE':
-			return $_GET;
-			break;
+				return $_GET;
+				break;
 		}
 	}
 
