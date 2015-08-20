@@ -6,47 +6,49 @@
 # Date : 18/08/2015
 # -----------------------
 
-require_once "helpers/application_helpers.php";
 require_once "conf/configuration.php";
-require_once "conf/routes.php";
+require_once "conf/router.php";
+require_once "helpers/application_helpers.php";
+require_once "helpers/database_helpers.php";
+require_once "helpers/flash_helpers.php";
 
 require_once "controllers/defaultController.php";
 require_once "controllers/fichesController.php";
 
 class Application {
-	// Singleton design pattern
-	private static $_instance = null;
+    // Singleton design pattern
+    private static $_instance = null;
 
-	public function Application() {
-		session_start();
-		$this->getRoute();
-	}
+    public function Application() {
+        session_start();
+        $this->getRoute();
+    }
 
-	private function getRoute() {
-		$router = new Routes();
+    private function getRoute() {
+        $router = Router::getRouter();
 
-		// Get URI from request
-		$url = $_SERVER['REQUEST_URI'];
-		$method = $_SERVER["REQUEST_METHOD"];
+        // Get URI from request
+        $url = $_SERVER['REQUEST_URI'];
+        $method = $_SERVER["REQUEST_METHOD"];
 
-		// Get handler for this request
-		$route = $router->getRoute($url, $method);
+        // Get handler for this request
+        $router = $router->getRoute($url, $method);
 
-		$controller = new $route->controller();
-		$controller->{$route->action}($route->params);
-	}
+        $controller = new $router->controller();
+        $controller->{$router->action}($router->params);
+    }
 
-	# ------------------------
-	# function getInstance
-	# Behaviour : return the singleton instance
-	# Input : none
-	# Output: Instance of Application
-	# ------------------------
-	public static function getInstance() {
-		if(is_null(self::$_instance)) {
-			self::$_instance = new Application();
-		}
-		return self::$_instance;
-	}
+    # ------------------------
+    # function getInstance
+    # Behaviour : return the singleton instance
+    # Input : none
+    # Output: Instance of Application
+    # ------------------------
+    public static function getApplication() {
+        if(is_null(self::$instance)) {
+            self::$instance = new Application();
+        }
+        return self::$_instance;
+    }
 }
 ?>
