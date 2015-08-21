@@ -15,7 +15,7 @@
 
             <div class="text-center">
                 <input type="submit" class="btn btn-default" value="Enregistrer">
-                <a href="/categories" class="btn btn-danger">Annuler</a>
+                <a href="/categories/<?php echo $data['categorie']->id ?>" class="btn btn-danger">Annuler</a>
             </div>
         </form>
     </div>

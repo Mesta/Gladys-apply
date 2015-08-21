@@ -14,7 +14,6 @@ class Fiche extends Model {
     protected static $persisted_fields = array("id", "libelle", "description");
     protected static $table_name = "fiche";
 
-    public $id;
     public $libelle;
     public $description;
 

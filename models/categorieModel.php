@@ -7,6 +7,7 @@
 # ---------------------------------
 
 require_once("model.php");
+require_once("categorieCategorieModel.php");
 
 class Categorie extends Model {
 
@@ -15,6 +16,9 @@ class Categorie extends Model {
 
     public $id;
     public $libelle;
+
+    private $fiches;
+    private $sous_categories;
 
     # ---------------
     # function filll
@@ -39,5 +43,17 @@ class Categorie extends Model {
             $this->fiches[] = $ficheCategorie->getFiche()[0];
         }
         return $this->fiches;
+    }
+
+    public function getSubCategories(){
+        $categories = CategorieCategorie::find(array("mother_id" => (integer)$this->id));
+
+        $this->sous_categories = array();
+
+        foreach($categories as $categorie){
+            $this->sous_categories[] = $categorie->getDaughter()[0];
+        }
+
+        return $this->sous_categories;
     }
 }

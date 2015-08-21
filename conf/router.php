@@ -21,6 +21,16 @@ class Router {
     # ---------------
     public function Router() {
         $this->routes = array(
+
+            // CategorieCategorie management (hierarchy)
+            new Route("categorieCategoriesController", "create", "#^\/categories\/(?P<mother_id>\d*)\/sous-categories\/ajouter$#",
+                "GET", array("mother_id")),
+            new Route("categorieCategoriesController", "create", "#^\/categories\/(?P<mother_id>\d*)\/sous-categories\/ajouter$#",
+                "POST", array("mother_id")),
+            new Route("categorieCategoriesController", "destroy",
+                "#^\/categories\/(?P<mother_id>\d*)\/sous-categories\/(?P<daughter_id>\d*)\/supprimer#", "GET", array("mother_id", "daughter_id")),
+
+            // FicheCategorie management from categories scope views
             new Route("ficheCategoriesController", "create", "#^\/(?P<callback>categories)\/(?P<categorie_id>\d*)\/fiches\/ajouter$#",
                 "GET", array("callback", "categorie_id")),
             new Route("ficheCategoriesController", "create", "#^\/(?P<callback>categories)\/(?P<categorie_id>\d*)\/fiches\/ajouter$#",
@@ -29,6 +39,7 @@ class Router {
                 "#^\/(?P<callback>categories)\/(?P<categorie_id>\d*)\/fiches\/(?P<fiche_id>\d*)\/supprimer$#", "GET",
                 array("fiche_id", "categorie_id", "callback")),
 
+            // FicheCategorie management from fiches scope views
             new Route("ficheCategoriesController", "create", "#^\/(?P<callback>fiches)\/(?P<fiche_id>\d*)\/categories\/ajouter$#",
                 "GET", array("callback", "fiche_id")),
             new Route("ficheCategoriesController", "create", "#^\/(?P<callback>fiches)\/(?P<fiche_id>\d*)\/categories\/ajouter$#",

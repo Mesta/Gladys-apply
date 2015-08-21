@@ -32,12 +32,12 @@ CREATE TABLE fiche_categorie
 
 CREATE TABLE categorie_categorie
 (
-	mere_id int NOT NULL,
-	fille_id int NOT NULL,
+	mother_id int NOT NULL,
+	daughter_id int NOT NULL,
 
-	PRIMARY KEY (mere_id, fille_id),
-	FOREIGN KEY (mere_id) REFERENCES categorie(id) ON DELETE CASCADE,
-	FOREIGN KEY (fille_id) REFERENCES categorie(id) ON DELETE CASCADE
+	PRIMARY KEY (mother_id, daughter_id),
+	FOREIGN KEY (mother_id) REFERENCES categorie(id) ON DELETE CASCADE,
+	FOREIGN KEY (daughter_id) REFERENCES categorie(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 INSERT INTO fiche(id, libelle, description) values(1, "Lorem", "ipsum dolor sit amet");
@@ -55,6 +55,6 @@ INSERT INTO fiche_categorie(fiche_id, categorie_id) values(2, 1);
 INSERT INTO fiche_categorie(fiche_id, categorie_id) values(2, 3);
 INSERT INTO fiche_categorie(fiche_id, categorie_id) values(3, 4);
 
-INSERT INTO categorie_categorie(mere_id, fille_id) values(1, 2);
-INSERT INTO categorie_categorie(mere_id, fille_id) values(1, 3);
-INSERT INTO categorie_categorie(mere_id, fille_id) values(2, 4);
+INSERT INTO categorie_categorie(mother_id, daughter_id) values(1, 2);
+INSERT INTO categorie_categorie(mother_id, daughter_id) values(1, 3);
+INSERT INTO categorie_categorie(mother_id, daughter_id) values(2, 4);
