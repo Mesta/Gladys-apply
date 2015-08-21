@@ -65,20 +65,12 @@ class DBHelpers{
     # ---------------
     public function create($sql)
     {
-
+        $retour = false;
         $dbh = $this->connect();
         $stmt = $dbh->prepare($sql);
 
-        try {
-            if ($stmt->execute())
-                $retour = $stmt->rowCount();
-            else
-                $retour = false;
-        }catch (Exception $e) {
-            if ($e->errorInfo[1] == 1062) {
-                echo "toto";
-            }
-        }
+        if ($stmt->execute())
+            $retour = $stmt->rowCount();
 
         return $retour;
     }
@@ -151,4 +143,3 @@ class DBHelpers{
     }
 
 }
-?>

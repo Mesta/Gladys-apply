@@ -42,6 +42,6 @@ class Fiche extends Model {
     }
 
     public function __toString(){
-        return $this->libelle;
+        return (string)$this->libelle;
     }
 }

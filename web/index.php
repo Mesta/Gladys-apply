@@ -7,5 +7,3 @@
 
 include_once "../application.php";
 new Application();
-
-?>

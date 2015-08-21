@@ -27,7 +27,7 @@ class CategoriesController extends Controller{
                 "categories"
             )
         );
-        parent::__construct();
+        parent::Controller();
     }
 
     # ------------------------
@@ -181,7 +181,7 @@ class CategoriesController extends Controller{
 
                 // If it's ok : filled the returned array
                 if(in_array($key, self::$allow_params)) {
-                    $clean[$key] = htmlentities($value);
+                    $clean[$key] = htmlentities($value, ENT_QUOTES);
                 }
             }
         }
@@ -189,4 +189,3 @@ class CategoriesController extends Controller{
         return $clean;
     }
 }
-?>

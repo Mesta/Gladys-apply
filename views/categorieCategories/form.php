@@ -39,12 +39,15 @@
             <br/>
 
             <div class="text-center">
-                <?php
+                <div class='btn-group btn-group-lg' role='group'>
+
+                    <?php
                     if(count($diff) > 0){
                         echo "<input type='submit' class='btn btn-default' value='Enregistrer'>";
                     }
                     echo "<a href='/categories/$categorie->id' class='btn btn-danger'>Retour</a>";
-                ?>
+                    ?>
+                </div>
             </div>
         </form>
     </div>

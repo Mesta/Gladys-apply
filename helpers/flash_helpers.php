@@ -130,4 +130,3 @@ class FlashHelpers{
         $_SESSION["notice"]["success"] = array();
     }
 }
-?>

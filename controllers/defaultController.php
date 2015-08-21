@@ -23,7 +23,7 @@ class DefaultController extends Controller{
 			"default"
 			)
 		);
-		parent::__construct();
+		parent::Controller();
 	}
 
 	# ------------------------
@@ -38,4 +38,3 @@ class DefaultController extends Controller{
 	}
 
 }
-?>

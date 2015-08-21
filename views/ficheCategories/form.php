@@ -7,6 +7,8 @@
     <div class="col-md-12">
         <form action="<?php echo $data["url"] ?>" method="POST">
             <?php
+            $diff = array();
+
             if(isset($data["fiche_id"])){
                 $fiche_id = $data["fiche_id"];
                 echo "<input type='hidden' value='$fiche_id' name='ficheCategorie[fiche_id]' id='ficheCategorie_fiche_id'>";
@@ -62,15 +64,22 @@
             ?>
 
             <div class="text-center">
-                <input type="submit" class="btn btn-default" value="Enregistrer">
-                <?php
-                if(isset($data["fiche_id"])){
-                    echo "<a href='/fiches' class='btn btn-danger'>Annuler</a>";
-                }
-                elseif(isset($data["categorie_id"])){
-                    echo "<a href='/categories/$categorie_id' class='btn btn-danger'>Annuler</a>";
-                }
-                ?>
+                <br/>
+                <div class='btn-group btn-group-lg' role='group'>
+
+                    <?php
+                    if(count($diff) > 0) {
+                        echo "<input type='submit' class='btn btn-default' value='Enregistrer'>";
+                    }
+
+                    if(isset($data["fiche_id"])){
+                        echo "<a href='/fiches' class='btn btn-danger'>Retour</a>";
+                    }
+                    elseif(isset($data["categorie_id"])){
+                        echo "<a href='/categories/$categorie_id' class='btn btn-danger'>Retour</a>";
+                    }
+                    ?>
+                </div>
             </div>
         </form>
     </div>

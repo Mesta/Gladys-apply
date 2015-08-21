@@ -31,5 +31,3 @@ class Controller {
         include($this->template);
     }
 }
-
-?>

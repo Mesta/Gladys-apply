@@ -89,15 +89,13 @@ class Router {
             $cpt++;
         }
 
-        if($match){
-            return $route;
-        }
-        else{
+        if(!$match){
             http_response_code(404);
             include_once("../web/404.html");
             exit;
         }
 
+        return $route;
     }
 
     # ---------------
@@ -113,4 +111,3 @@ class Router {
     }
 }
 
-?>

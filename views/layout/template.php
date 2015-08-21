@@ -12,9 +12,10 @@
     <link rel="stylesheet" href="/assets/css/default.css">
 </head>
 <body>
-<?php include_once "header.php" ?>
 
 <div class="container">
+    <?php include_once "header.php" ?>
+
     <div class="notice">
         <?php include_once "message.php" ?>
     </div>

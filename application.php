@@ -20,7 +20,7 @@ require_once "controllers/categorieCategoriesController.php";
 
 class Application {
     // Singleton design pattern
-    private static $_instance = null;
+    private static $instance = null;
 
     public function Application() {
         session_start();
@@ -57,7 +57,6 @@ class Application {
         if(is_null(self::$instance)) {
             self::$instance = new Application();
         }
-        return self::$_instance;
+        return self::$instance;
     }
 }
-?>

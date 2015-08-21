@@ -27,7 +27,7 @@ class FicheCategoriesController extends Controller{
                 "ficheCategories"
             )
         );
-        parent::__construct();
+        parent::Controller();
     }
 
     # ------------------------
@@ -144,7 +144,7 @@ class FicheCategoriesController extends Controller{
 
                 // If it's ok : filled the returned array
                 if(in_array($key, self::$allow_params)) {
-                    $clean[$key] = htmlentities($value);
+                    $clean[$key] = htmlentities($value, ENT_QUOTES);
                 }
             }
         }
@@ -152,4 +152,3 @@ class FicheCategoriesController extends Controller{
         return $clean;
     }
 }
-?>

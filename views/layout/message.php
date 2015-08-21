@@ -35,4 +35,3 @@ foreach($messages as $message){
     echo "</div>";
 }
 
-?>

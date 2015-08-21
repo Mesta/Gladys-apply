@@ -13,7 +13,7 @@ foreach($fiches as $fiche) {
     }
 
     echo "<div class='col-md-3'>";
-    echo "    <div class='thumbnail'>";
+    echo "    <div class='thumbnail' id='fiche'>";
     echo "        <h2>" . $fiche->libelle . "</h2>";
     echo "        <p>" . $fiche->description . "</p>";
 
